@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZUNO - Random Video Chat</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1e3a 0%, #1a3a52 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: rgba(15, 30, 50, 0.95);
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 64px;
+            font-weight: bold;
+            color: #ff3333;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="number"]::placeholder {
+            color: #666;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 2px rgba(255, 51, 51, 0.2);
+        }
+
+        .gender-group {
+            margin-bottom: 30px;
+        }
+
+        .gender-label {
+            color: #999;
+            display: block;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .gender-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .gender-btn {
+            padding: 10px 25px;
+            border: 2px solid #444;
+            border-radius: 8px;
+            background: transparent;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .gender-btn:hover {
+            border-color: #666;
+        }
+
+        .gender-btn.active {
+            background: #ff3333;
+            border-color: #ff3333;
+        }
+
+        .enter-btn {
+            width: 100%;
+            padding: 15px;
+            background: #ff3333;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .enter-btn:hover {
+            background: #ff5555;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 51, 51, 0.3);
+        }
+
+        .enter-btn:active {
+            transform: translateY(0);
+        }
+
+        .rules-btn {
+            padding: 10px 30px;
+            background: transparent;
+            color: #999;
+            border: 2px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .rules-btn:hover {
+            border-color: #ff3333;
+            color: #ff3333;
+        }
+
+        .footer-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-btn {
+            padding: 8px 20px;
+            background: transparent;
+            color: #666;
+            border: 1px solid #444;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .footer-btn:hover {
+            color: #999;
+            border-color: #666;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ff3333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-text {
+            color: #333;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .modal-text ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .modal-text li {
+            padding: 8px 0;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        /* Chat Screen */
+        .chat-screen {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a1e3a 0%, #1a3a52 100%);
+            flex-direction: column;
+        }
+
+        .chat-screen.show {
+            display: flex;
+        }
+
+        .chat-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-small {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff3333;
+            letter-spacing: 2px;
+        }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .online-count {
+            background: rgba(255, 200, 0, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: #ffc800;
+            font-weight: bold;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            padding: 8px 20px;
+            background: transparent;
+            color: #999;
+            border: 1px solid #444;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .header-btn:hover {
+            color: #fff;
+            border-color: #fff;
+        }
+
+        .header-btn.premium {
+            color: #ffc800;
+            border-color: #ffc800;
+        }
+
+        .chat-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .video-section {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .video-box {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #ff3333;
+            position: relative;
+        }
+
+        .video-box-title {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 51, 51, 0.8);
+            padding: 5px 12px;
+            border-radius: 5px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .stranger-placeholder {
+            text-align: center;
+            color: #999;
+        }
+
+        .stranger-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        .camera-controls {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+
+        .camera-select {
+            background: #555;
+            color: white;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .flip-btn {
+            padding: 10px;
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .flip-btn:hover {
+            background: #777;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+
+        .btn-start {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-start:hover {
+            background: #2ecc71;
+        }
+
+        .btn-next {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: #f1c40f;
+            color: #000;
+        }
+
+        .btn-end {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-end:hover {
+            background: #c0392b;
+        }
+
+        .btn-report {
+            background: #7f8c8d;
+            color: white;
+        }
+
+        .btn-report:hover {
+            background: #95a5a6;
+        }
+
+        .tool-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tool-btn {
+            flex: 1;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .tool-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tool-btn.active {
+            background: #ff3333;
+            border-color: #ff3333;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: rgba(255, 51, 51, 0.2);
+            color: #ff3333;
+            border: 1px solid #ff3333;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background: #ff3333;
+            color: white;
+        }
+
+        .filter-btn:hover {
+            background: #ff3333;
+            color: white;
+        }
+
+        .chat-section {
+            width: 350px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-header-title {
+            color: #999;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .messages-box {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .message {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .message.own {
+            background: rgba(255, 51, 51, 0.3);
+            text-align: right;
+        }
+
+        .empty-chat {
+            color: #666;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .message-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-input input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .message-input input::placeholder {
+            color: #666;
+        }
+
+        .send-btn {
+            padding: 10px 20px;
+            background: #444;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .send-btn:hover {
+            background: #555;
+        }
+
+        .searching-text {
+            color: #ffc800;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 768px) {
+            .chat-content {
+                flex-direction: column;
+            }
+
+            .chat-section {
+                width: 100%;
+                height: 300px;
+                border-left: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .login-container {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+        <div class="logo">ZUNO</div>
+        <div class="subtitle">Random video chat with strangers</div>
+
+        <div class="form-group">
+            <input type="text" id="nameInput" placeholder="YOUR NAME" maxlength="30">
+            <input type="number" id="ageInput" placeholder="YOUR AGE (18+)" min="18" max="120">
+        </div>
+
+        <div class="gender-group">
+            <label class="gender-label">I am:</label>
+            <div class="gender-buttons">
+                <button class="gender-btn active" data-gender="male">BOY</button>
+                <button class="gender-btn" data-gender="female">GIRL</button>
+                <button class="gender-btn" data-gender="other">OTHER</button>
+            </div>
+        </div>
+
+        <button class="enter-btn" onclick="handleLogin()">ENTER</button>
+
+        <button class="rules-btn" onclick="openModal('rules')">RULES</button>
+
+        <div class="footer-buttons">
+            <button class="footer-btn" onclick="openModal('terms')">TERMS</button>
+            <button class="footer-btn" onclick="openModal('policy')">POLICY</button>
+            <button class="footer-btn" onclick="openModal('privacy')">PRIVACY</button>
+        </div>
+    </div>
+
+    <!-- Chat Screen -->
+    <div class="chat-screen" id="chatScreen">
+        <div class="chat-header">
+            <div class="logo-small">ZUNO</div>
+            <div class="status-bar">
+                <span id="statusText">Idle</span>
+                <span id="onlineUsers" class="online-count">0</span>
+            </div>
+            <div class="header-buttons">
+                <button class="header-btn premium" onclick="openModal('premium')">PREMIUM</button>
+                <button class="header-btn" onclick="openModal('history')">HISTORY</button>
+            </div>
+        </div>
+
+        <div class="chat-content">
+            <div class="video-section">
+                <div class="video-box">
+                    <div class="video-box-title" id="videoTitle">Stranger</div>
+                    <video id="localVideo" autoplay muted playsinline></video>
+                    <div class="stranger-placeholder" id="strangerPlaceholder">
+                        <div class="stranger-icon">👤</div>
+                        <div>Stranger</div>
+                    </div>
+                </div>
+
+                <div class="camera-controls">
+                    <button class="flip-btn" onclick="flipCamera()">📱 Flip Camera</button>
+                    <select class="camera-select" id="cameraSelect" onchange="changeCamera()">
+                        <option value="">Camera</option>
+                    </select>
+                    <select class="camera-select" id="micSelect" onchange="changeMic()">
+                        <option value="">Mic</option>
+                    </select>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-start" onclick="startChat()">▶ START</button>
+                    <button class="action-btn btn-next" onclick="nextStranger()">⏭ NEXT (-2)</button>
+                    <button class="action-btn btn-end" onclick="endChat()">⏹ END</button>
+                    <button class="action-btn btn-report" onclick="openModal('report')">🚩 REPORT</button>
+                </div>
+
+                <div class="tool-buttons">
+                    <button class="tool-btn" onclick="toggleMute()">🔇 Mute</button>
+                    <button class="tool-btn" onclick="toggleCamera()">📹 Cam Off</button>
+                    <button class="tool-btn" onclick="toggleAutoOff()">⚡ Auto OFF</button>
+                </div>
+
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all" onclick="setGenderFilter(this)">ALL</button>
+                    <button class="filter-btn" data-filter="male" onclick="setGenderFilter(this)">BOY 🔒</button>
+                    <button class="filter-btn" data-filter="female" onclick="setGenderFilter(this)">GIRL 🔒</button>
+                    <button class="filter-btn" data-filter="other" onclick="setGenderFilter(this)">All 🔒</button>
+                </div>
+
+                <div class="searching-text" id="searchingText" style="display: none;">🔄 Finding stranger...</div>
+            </div>
+
+            <div class="chat-section">
+                <div class="chat-header-title">Chat</div>
+                <div class="messages-box" id="messagesBox">
+                    <div class="empty-chat">Connect to start chatting</div>
+                </div>
+                <div class="message-input">
+                    <input type="text" id="messageInput" placeholder="Connect first..." onkeypress="handleMessageKeypress(event)">
+                    <button class="send-btn" onclick="sendMessage()">SEND</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="rulesModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('rules')">✕</button>
+            <div class="modal-title">RULES</div>
+            <div class="modal-text">
+                <ul>
+                    <li>✓ 18+ only</li>
+                    <li>✗ No nudity</li>
+                    <li>✗ No abuse</li>
+                    <li>✓ Be respectful</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="termsModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('terms')">✕</button>
+            <div class="modal-title">TERMS</div>
+            <div class="modal-text">
+                By using ZUNO you agree to be 18+, not engage in illegal activity, and follow community guidelines.
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="policyModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('policy')">✕</button>
+            <div class="modal-title">POLICY</div>
+            <div class="modal-text">
+                We do not store your video. Chats are ephemeral. Reports are reviewed by our team.
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="privacyModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('privacy')">✕</button>
+            <div class="modal-title">PRIVACY</div>
+            <div class="modal-text">
+                We collect minimal data. Your IP is used only for matching. We do not sell data.
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="premiumModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('premium')">✕</button>
+            <div class="modal-title">⭐ PREMIUM</div>
+            <div class="modal-text">
+                <p style="margin-bottom: 20px;">Unlock: free NEXT (no coin cost), 2× ad coins, gender filter, country filter</p>
+                <button style="width: 100%; padding: 12px; background: #f39c12; border: none; border-radius: 6px; color: white; font-weight: bold; margin: 10px 0; cursor: pointer;">PLATINUM — 200 coins (2h)</button>
+                <button style="width: 100%; padding: 12px; background: #d4af37; border: none; border-radius: 6px; color: white; font-weight: bold; margin: 10px 0; cursor: pointer;">GOLD — 500 coins (10h)</button>
+                <button style="width: 100%; padding: 12px; background: #e8d4f8; border: none; border-radius: 6px; color: #333; font-weight: bold; margin: 10px 0; cursor: pointer;">DIAMOND — 1000 coins (24h)</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="historyModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('history')">✕</button>
+            <div class="modal-title">CHAT HISTORY</div>
+            <div class="modal-text">
+                <p>No history yet</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="reportModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('report')">✕</button>
+            <div class="modal-title">REPORT</div>
+            <div class="modal-text">
+                <p style="color: #d00; margin-bottom: 20px; font-weight: bold;">After 3 reports a user is auto-banned.</p>
+                <button onclick="submitReport('ABUSE')" style="width: 100%; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 6px; margin: 10px 0; cursor: pointer; font-weight: 600;">ABUSE</button>
+                <button onclick="submitReport('NUDITY')" style="width: 100%; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 6px; margin: 10px 0; cursor: pointer; font-weight: 600;">NUDITY</button>
+                <button onclick="submitReport('VIOLENCE')" style="width: 100%; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 6px; margin: 10px 0; cursor: pointer; font-weight: 600;">VIOLENCE</button>
+                <button onclick="submitReport('SPAM')" style="width: 100%; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 6px; margin: 10px 0; cursor: pointer; font-weight: 600;">SPAM</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
