@@ -363,14 +363,14 @@
         }
 
         .panel-card {
-            background: #091124;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #0a101e;
+            border: 1px solid #1f3474;
             border-radius: 20px;
             padding: 18px;
             display: flex;
             flex-direction: column;
             gap: 16px;
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.22);
         }
 
         .panel-title-row {
@@ -380,8 +380,8 @@
         }
 
         .panel-avatar {
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: #ff4343;
             display: inline-flex;
@@ -403,19 +403,137 @@
             font-size: 12px;
         }
 
-        .video-panel {
-            background: #090f1f;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 18px;
-            overflow: hidden;
-            min-height: 260px;
-            position: relative;
+        .settings-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
 
-        .video-panel video {
+        .settings-panel .control-button,
+        .settings-panel .control-select {
+            background: #f2f4fb;
+            color: #141b35;
+            border: 1px solid #c8d0eb;
+        }
+
+        .settings-panel .control-select {
+            padding: 12px 14px;
+        }
+
+        .settings-panel .control-button {
+            padding: 14px 16px;
+        }
+
+        .remote-panel {
+            background: #0a101e;
+            border: 1px solid #2d4b8d;
+            border-radius: 20px;
+            overflow: hidden;
+            min-height: 240px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .remote-panel video {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: none;
+        }
+
+        .remote-panel.active video {
+            display: block;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+
+        .action-btn {
+            padding: 14px 12px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            min-height: 48px;
+        }
+
+        .btn-start { background: #27ae60; }
+        .btn-next { background: #f39c12; }
+        .btn-end { background: #e74c3c; }
+        .btn-report { background: #4a4f5e; }
+
+        .tool-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tool-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 14px;
+            background: #14234e;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .tool-btn:hover { background: #1f3373; }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: #152a57;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .filter-btn.active {
+            background: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .chat-panel {
+            width: 450px;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fb;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .chat-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #dce1ec;
+            color: #232a40;
+        }
+
+        .chat-panel-header .title {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .chat-panel-header .room-status {
+            font-size: 12px;
+            color: #7a7f94;
         }
 
         .video-panel .placeholder,
@@ -753,11 +871,13 @@
                 <div class="ads-pill">ADS +20</div>
             </div>
             <div class="header-center">
+                <span class="status-text">•</span>
                 <span id="statusText">Idle</span>
                 <span class="online-pill" id="onlineUsers">1 online</span>
-                <span class="status-pill">220</span>
+                <span class="status-pill" id="coinCount">220 🪙</span>
             </div>
             <div class="header-right">
+                <button class="header-btn bell-btn" type="button">🔔</button>
                 <button class="header-btn premium" onclick="openModal('premium')">PREMIUM</button>
                 <button class="header-btn" onclick="openModal('history')">HISTORY</button>
             </div>
@@ -770,19 +890,10 @@
                         <div class="panel-avatar" id="userAvatar">F</div>
                         <div>
                             <div class="panel-title-text" id="localTitle">fyf · boy</div>
-                            <div class="panel-label">Your camera</div>
                         </div>
                     </div>
 
-                    <div class="video-panel">
-                        <video id="localVideo" autoplay muted playsinline></video>
-                        <div class="placeholder" id="localPlaceholder">
-                            <div class="icon">👤</div>
-                            <div class="label">You</div>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
+                    <div class="settings-panel">
                         <button class="control-button" onclick="flipCamera()">Flip Camera</button>
                         <select class="control-select" id="cameraSelect" onchange="changeCamera()">
                             <option value="">Chicony USB2.0 Camera (04)</option>
@@ -818,7 +929,7 @@
                     <button class="filter-btn active" data-filter="all" onclick="setGenderFilter(this)">ALL</button>
                     <button class="filter-btn" data-filter="male" onclick="setGenderFilter(this)">BOY 🔒</button>
                     <button class="filter-btn" data-filter="female" onclick="setGenderFilter(this)">GIRL 🔒</button>
-                    <button class="filter-btn" data-filter="other" onclick="setGenderFilter(this)">All 🔒</button>
+                    <button class="filter-btn" data-filter="other" onclick="setGenderFilter(this)">All 🔒 ▾</button>
                 </div>
 
                 <div class="searching-text" id="searchingText" style="display: none;">🔄 Finding stranger...</div>
