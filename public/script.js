@@ -71,6 +71,11 @@ async function startLocalStream() {
 // Update Camera Devices
 async function updateCameraDevices() {
     try {
+        // Request permission if not already granted
+        if (!localStream) {
+            await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        }
+
         const devices = await navigator.mediaDevices.enumerateDevices();
         const cameras = devices.filter(d => d.kind === 'videoinput');
         const mics = devices.filter(d => d.kind === 'audioinput');
@@ -78,23 +83,31 @@ async function updateCameraDevices() {
         const cameraSelect = document.getElementById('cameraSelect');
         const micSelect = document.getElementById('micSelect');
 
-        cameras.forEach(cam => {
-            if (!cameraSelect.querySelector(`option[value="${cam.deviceId}"]`)) {
-                const option = document.createElement('option');
-                option.value = cam.deviceId;
-                option.textContent = cam.label || `Camera ${cameraSelect.options.length}`;
-                cameraSelect.appendChild(option);
-            }
+        // Clear existing options except the first one
+        while (cameraSelect.options.length > 1) {
+            cameraSelect.remove(1);
+        }
+        while (micSelect.options.length > 1) {
+            micSelect.remove(1);
+        }
+
+        // Add camera options
+        cameras.forEach((cam, index) => {
+            const option = document.createElement('option');
+            option.value = cam.deviceId;
+            option.textContent = cam.label || `Camera ${index + 1}`;
+            cameraSelect.appendChild(option);
         });
 
-        mics.forEach(mic => {
-            if (!micSelect.querySelector(`option[value="${mic.deviceId}"]`)) {
-                const option = document.createElement('option');
-                option.value = mic.deviceId;
-                option.textContent = mic.label || `Mic ${micSelect.options.length}`;
-                micSelect.appendChild(option);
-            }
+        // Add microphone options
+        mics.forEach((mic, index) => {
+            const option = document.createElement('option');
+            option.value = mic.deviceId;
+            option.textContent = mic.label || `Microphone ${index + 1}`;
+            micSelect.appendChild(option);
         });
+
+        console.log(`Found ${cameras.length} cameras and ${mics.length} microphones`);
     } catch (err) {
         console.error('Error enumerating devices:', err);
     }
@@ -103,7 +116,7 @@ async function updateCameraDevices() {
 // Change Camera
 async function changeCamera() {
     const deviceId = document.getElementById('cameraSelect').value;
-    if (deviceId) {
+    if (deviceId && localStream) {
         try {
             const constraints = {
                 video: { deviceId: { exact: deviceId } },
@@ -111,12 +124,21 @@ async function changeCamera() {
             };
             const newStream = await navigator.mediaDevices.getUserMedia(constraints);
             const videoTrack = newStream.getVideoTracks()[0];
-            localStream.getVideoTracks().forEach(track => track.stop());
+
+            // Stop current video track
+            if (currentCamera) {
+                currentCamera.stop();
+            }
+
+            // Replace video track
             localStream.removeTrack(localStream.getVideoTracks()[0]);
             localStream.addTrack(videoTrack);
             currentCamera = videoTrack;
+
+            console.log('Camera changed successfully');
         } catch (err) {
             console.error('Error switching camera:', err);
+            alert('Unable to switch camera. Please try again.');
         }
     }
 }
@@ -124,41 +146,83 @@ async function changeCamera() {
 // Change Mic
 async function changeMic() {
     const deviceId = document.getElementById('micSelect').value;
-    if (deviceId) {
+    if (deviceId && localStream) {
         try {
             const audioConstraints = { deviceId: { exact: deviceId } };
             const audioStream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints });
             const audioTrack = audioStream.getAudioTracks()[0];
-            localStream.getAudioTracks().forEach(track => track.stop());
+
+            // Stop current audio track
+            if (currentMic) {
+                currentMic.stop();
+            }
+
+            // Replace audio track
             localStream.removeTrack(localStream.getAudioTracks()[0]);
             localStream.addTrack(audioTrack);
             currentMic = audioTrack;
+
+            console.log('Microphone changed successfully');
         } catch (err) {
-            console.error('Error switching mic:', err);
+            console.error('Error switching microphone:', err);
+            alert('Unable to switch microphone. Please try again.');
         }
     }
 }
 
 // Flip Camera
 async function flipCamera() {
+    if (!localStream) return;
+
     try {
         const videoTrack = localStream.getVideoTracks()[0];
+        if (!videoTrack) return;
+
         const settings = videoTrack.getSettings();
-        const facingMode = settings.facingMode === 'user' ? 'environment' : 'user';
-        
+        const currentFacingMode = settings.facingMode;
+
+        // Determine new facing mode
+        const newFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+
         const constraints = {
-            video: { facingMode: { exact: facingMode } },
+            video: { facingMode: { exact: newFacingMode } },
             audio: true
         };
+
         const newStream = await navigator.mediaDevices.getUserMedia(constraints);
         const newVideoTrack = newStream.getVideoTracks()[0];
-        
-        localStream.getVideoTracks().forEach(track => track.stop());
+
+        // Stop current video track
+        videoTrack.stop();
+
+        // Replace video track
         localStream.removeTrack(videoTrack);
         localStream.addTrack(newVideoTrack);
         currentCamera = newVideoTrack;
+
+        console.log('Camera flipped successfully');
     } catch (err) {
         console.error('Error flipping camera:', err);
+        // If exact facing mode fails, try without exact
+        try {
+            const fallbackConstraints = {
+                video: { facingMode: 'environment' },
+                audio: true
+            };
+            const fallbackStream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
+            const fallbackVideoTrack = fallbackStream.getVideoTracks()[0];
+
+            const currentVideoTrack = localStream.getVideoTracks()[0];
+            currentVideoTrack.stop();
+            localStream.removeTrack(currentVideoTrack);
+            localStream.addTrack(fallbackVideoTrack);
+            currentCamera = fallbackVideoTrack;
+
+            console.log('Camera flipped with fallback');
+        } catch (fallbackErr) {
+            console.error('Fallback camera flip failed:', fallbackErr);
+            alert('Unable to flip camera. Your device may not support camera switching.');
+        }
     }
 }
 
@@ -358,4 +422,10 @@ socket.on('start-search-trigger', () => {
 // Initialize
 window.addEventListener('load', () => {
     updateCameraDevices();
+
+    // Listen for device changes
+    navigator.mediaDevices.addEventListener('devicechange', () => {
+        console.log('Media devices changed');
+        updateCameraDevices();
+    });
 });
