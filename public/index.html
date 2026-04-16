@@ -329,20 +329,34 @@
             flex-direction: row;
             gap: 10px;
             align-items: flex-start;
+            position: relative;
         }
 
         .video-box {
             background: #1a1a1a;
             border-radius: 12px;
             overflow: hidden;
-            width: 250px;
-            height: 250px;
+            width: 400px;
+            height: 400px;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
             max-width: 90vw;
             max-height: 90vw;
+        }
+
+        .local-video-box {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 120px;
+            height: 120px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #fff;
+            z-index: 10;
         }
 
         .left-buttons {
@@ -355,8 +369,8 @@
         .right-content {
             flex: 1;
             display: flex;
-            flex-direction: row;
-            gap: 10px;
+            flex-direction: column;
+            gap: 15px;
             align-items: center;
         }
 
@@ -652,14 +666,19 @@
             }
 
             .video-box {
-                width: 200px;
-                height: 200px;
+                width: 300px;
+                height: 300px;
                 max-width: 90vw;
                 max-height: 90vw;
             }
 
+            .local-video-box {
+                width: 80px;
+                height: 80px;
+            }
+
             .camera-controls {
-                width: 200px;
+                width: 300px;
                 max-width: 90vw;
             }
 
@@ -751,19 +770,18 @@
                 </div>
                 <div class="right-content">
                     <div class="video-box">
-                        <div class="video-box-title" id="videoTitle">You</div>
-                        <video id="localVideo" autoplay muted playsinline></video>
-                        <div class="stranger-placeholder" id="localPlaceholder">
-                            <div class="stranger-icon">👤</div>
-                            <div>You</div>
-                        </div>
-                    </div>
-                    <div class="video-box">
                         <div class="video-box-title" id="strangerTitle">Stranger</div>
                         <video id="remoteVideo" autoplay playsinline></video>
                         <div class="stranger-placeholder" id="remotePlaceholder">
                             <div class="stranger-icon">👤</div>
                             <div>Stranger</div>
+                        </div>
+                        <div class="local-video-box">
+                            <video id="localVideo" autoplay muted playsinline></video>
+                            <div class="stranger-placeholder" id="localPlaceholder">
+                                <div class="stranger-icon" style="font-size: 30px;">👤</div>
+                                <div style="font-size: 10px;">You</div>
+                            </div>
                         </div>
                     </div>
 
