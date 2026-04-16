@@ -352,11 +352,19 @@
             flex: 1;
             gap: 14px;
             padding: 20px;
-            overflow: hidden;
+            overflow-x: auto;
+            overflow-y: hidden;
         }
 
         .video-column {
-            width: 460px;
+            width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .controls-column {
+            width: 280px;
             display: flex;
             flex-direction: column;
             gap: 14px;
@@ -911,7 +919,9 @@
                     </div>
                     <video id="remoteVideo" autoplay playsinline></video>
                 </div>
+            </div>
 
+            <div class="controls-column">
                 <div class="action-buttons">
                     <button class="action-btn btn-start" onclick="startChat()">▶ START</button>
                     <button class="action-btn btn-next" onclick="nextStranger()">⏭ NEXT (-2)</button>
