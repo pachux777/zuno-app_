@@ -258,382 +258,375 @@
         }
 
         .chat-header {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px 30px;
+            background: #071025;
+            padding: 18px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid #1c2c53;
         }
 
-        .logo-small {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff3333;
-            letter-spacing: 2px;
-        }
-
-        .status-bar {
+        .header-left,
+        .header-center,
+        .header-right {
             display: flex;
             align-items: center;
-            gap: 20px;
-            color: #999;
+            gap: 12px;
+        }
+
+        .header-left {
+            color: #fff;
+            font-weight: 700;
             font-size: 14px;
         }
 
-        .online-count {
-            background: rgba(255, 200, 0, 0.2);
-            padding: 5px 15px;
-            border-radius: 20px;
-            color: #ffc800;
-            font-weight: bold;
+        .logo-small {
+            font-size: 22px;
+            color: #ff3333;
+            letter-spacing: 2px;
+            margin-right: 12px;
         }
 
-        .header-buttons {
-            display: flex;
+        .ads-pill {
+            background: #10214c;
+            color: #fff;
+            border: 1px solid #1c315f;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .header-center {
+            flex: 1;
+            justify-content: center;
+            gap: 16px;
+            color: #d8dee8;
+            font-size: 13px;
+        }
+
+        .header-center span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-pill,
+        .online-pill {
+            background: #ffcc27;
+            color: #1c2a3f;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .header-right {
             gap: 10px;
         }
 
         .header-btn {
-            padding: 8px 20px;
-            background: transparent;
-            color: #999;
-            border: 1px solid #444;
-            border-radius: 6px;
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.07);
+            color: #f1f4fb;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
             cursor: pointer;
             font-size: 12px;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-weight: 700;
+            transition: all 0.25s ease;
         }
 
         .header-btn:hover {
-            color: #fff;
+            background: rgba(255, 255, 255, 0.16);
             border-color: #fff;
         }
 
         .header-btn.premium {
-            color: #ffc800;
-            border-color: #ffc800;
+            color: #ffd95e;
+            border-color: rgba(255, 217, 94, 0.35);
         }
 
         .chat-content {
             display: flex;
             flex: 1;
+            gap: 14px;
+            padding: 20px;
             overflow: hidden;
         }
 
-        .video-section {
-            flex: 1;
-            padding: 10px;
+        .video-column {
+            width: 460px;
             display: flex;
-            flex-direction: row;
-            gap: 10px;
-            align-items: flex-start;
-            position: relative;
+            flex-direction: column;
+            gap: 14px;
         }
 
-        .video-box {
-            background: #1a1a1a;
-            border-radius: 12px;
-            overflow: hidden;
-            width: 400px;
-            height: 400px;
+        .panel-card {
+            background: #091124;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 18px;
             display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+        }
+
+        .panel-title-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .panel-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #ff4343;
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
-            position: relative;
-            max-width: 90vw;
-            max-height: 90vw;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 800;
         }
 
-        .local-video-box {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            width: 120px;
-            height: 120px;
-            background: #1a1a1a;
-            border-radius: 8px;
+        .panel-title-text {
+            color: #f7f8ff;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .panel-label {
+            color: #9db2d4;
+            font-size: 12px;
+        }
+
+        .video-panel {
+            background: #090f1f;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
             overflow: hidden;
-            border: 2px solid #fff;
-            z-index: 10;
+            min-height: 260px;
+            position: relative;
         }
 
-        .left-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 120px;
-        }
-
-        .right-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-        }
-
-        video {
+        .video-panel video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 10px;
         }
 
-        .stranger-placeholder {
-            text-align: center;
-            color: #999;
-        }
-
-        .stranger-icon {
-            font-size: 60px;
-            margin-bottom: 10px;
-        }
-
-        .camera-controls {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px;
-            border-radius: 10px;
+        .video-panel .placeholder,
+        .remote-panel .placeholder {
+            position: absolute;
+            inset: 0;
             display: flex;
-            gap: 10px;
             flex-direction: column;
-            width: 300px;
-            max-width: 90vw;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: #7f91c2;
+            text-align: center;
         }
 
-        .camera-select {
-            background: #555;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            width: 100%;
+        .placeholder .icon {
+            font-size: 42px;
         }
 
-        .mic-select {
-            background: #555;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            width: 100%;
-        }
-
-        .flip-btn {
-            padding: 12px;
-            background: #666;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+        .placeholder .label {
+            color: #b0b8d6;
+            font-size: 16px;
             font-weight: 600;
-            transition: all 0.3s;
-            width: 100%;
         }
 
-        .flip-btn:hover {
-            background: #777;
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-button {
+            width: 100%;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 14px;
+            background: #e7eaf9;
+            color: #141a34;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.25s ease;
+        }
+
+        .control-button:hover {
+            background: #d8dcee;
+        }
+
+        .control-select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid #cbd0e8;
+            background: #f8f9ff;
+            color: #192a46;
+            font-size: 13px;
+        }
+
+        .remote-panel {
+            background: #091124;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            min-height: 260px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .remote-panel video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .action-buttons {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            margin-top: 10px;
         }
 
         .action-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 12px;
+            padding: 14px 10px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
         }
 
-        .btn-start {
-            background: #27ae60;
-            color: white;
-        }
+        .btn-start { background: #27ae60; }
+        .btn-next { background: #f39c12; }
+        .btn-end { background: #e74c3c; }
+        .btn-report { background: #4a4f5e; }
 
-        .btn-start:hover {
-            background: #2ecc71;
-        }
-
-        .btn-next {
-            background: #f39c12;
-            color: white;
-        }
-
-        .btn-next:hover {
-            background: #f1c40f;
-            color: #000;
-        }
-
-        .btn-end {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .btn-end:hover {
-            background: #c0392b;
-        }
-
-        .btn-report {
-            background: #7f8c8d;
-            color: white;
-        }
-
-        .btn-report:hover {
-            background: #95a5a6;
-        }
-
-        .tool-buttons {
+        .tool-row {
             display: flex;
-            flex-direction: column;
             gap: 10px;
-            margin-top: 10px;
         }
 
         .tool-btn {
-            flex: none;
-            padding: 8px 15px;
-            background: rgba(255, 255, 255, 0.1);
+            flex: 1;
+            padding: 12px;
+            border-radius: 14px;
+            background: #14234e;
             color: #fff;
-            border: 1px solid #444;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s;
-            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 13px;
+            font-weight: 700;
         }
 
-        .tool-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
+        .tool-btn:hover { background: #1f3373; }
 
-        .tool-btn.active {
-            background: #ff3333;
-            border-color: #ff3333;
-        }
-
-        .filter-buttons {
+        .filter-row {
             display: flex;
-            gap: 8px;
-            margin-top: 10px;
             flex-wrap: wrap;
+            gap: 10px;
         }
 
         .filter-btn {
-            padding: 8px 14px;
-            background: rgba(255, 51, 51, 0.2);
-            color: #ff3333;
-            border: 1px solid #ff3333;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: #152a57;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             font-size: 12px;
-            transition: all 0.3s;
+            font-weight: 700;
         }
 
         .filter-btn.active {
-            background: #ff3333;
-            color: white;
+            background: #e74c3c;
+            border-color: #e74c3c;
         }
 
-        .filter-btn:hover {
-            background: #ff3333;
-            color: white;
-        }
-
-        .chat-section {
-            width: 300px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 10px;
+        .chat-panel {
+            width: 450px;
             display: flex;
             flex-direction: column;
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            background: #f8f9fb;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
         }
 
-        .chat-header-title {
-            color: #999;
-            font-weight: 600;
-            margin-bottom: 10px;
+        .chat-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #dce1ec;
+            color: #232a40;
+        }
+
+        .chat-panel-header .title {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .chat-panel-header .room-status {
             font-size: 12px;
+            color: #7a7f94;
         }
 
         .messages-box {
             flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 10px;
+            padding: 24px;
+            background: #f4f7fd;
             overflow-y: auto;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .message {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 8px 10px;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            font-size: 12px;
-            line-height: 1.4;
-        }
-
-        .message.own {
-            background: rgba(255, 51, 51, 0.3);
-            text-align: right;
         }
 
         .empty-chat {
-            color: #666;
-            text-align: center;
-            font-size: 12px;
+            margin: 0 auto;
+            color: #9da5c2;
+            font-size: 14px;
         }
 
         .message-input {
+            padding: 16px 20px 24px;
             display: flex;
-            gap: 8px;
+            gap: 10px;
+            border-top: 1px solid #dce1ec;
+            background: #fff;
         }
 
         .message-input input {
             flex: 1;
-            padding: 8px 10px;
-            border: 1px solid #444;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            font-size: 12px;
+            padding: 12px 14px;
+            border: 1px solid #d4d9e8;
+            border-radius: 14px;
+            background: #fff;
+            color: #232a40;
+            font-size: 13px;
         }
 
         .message-input input::placeholder {
-            color: #666;
+            color: #afb4c7;
         }
 
         .send-btn {
-            padding: 8px 15px;
-            background: #444;
-            color: #fff;
+            flex-shrink: 0;
+            padding: 12px 24px;
+            border-radius: 14px;
             border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 12px;
+            background: #4a4f5e;
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
         }
 
         .send-btn:hover {
-            background: #555;
+            background: #575f75;
         }
 
         .searching-text {
@@ -649,67 +642,74 @@
             50% { opacity: 0.5; }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .chat-content {
                 flex-direction: column;
+                padding: 16px;
             }
 
-            .chat-section {
+            .video-column,
+            .chat-panel {
                 width: 100%;
-                height: 200px;
-                border-left: none;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
             }
 
-            .login-container {
-                padding: 40px 20px;
+            .action-buttons {
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            .video-box {
-                width: 300px;
-                height: 300px;
-                max-width: 90vw;
-                max-height: 90vw;
+            .header-center {
+                display: none;
             }
 
-            .local-video-box {
-                width: 80px;
-                height: 80px;
-            }
-
-            .camera-controls {
-                width: 300px;
-                max-width: 90vw;
-            }
-
-            .camera-controls div {
+            .chat-panel-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 5px;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .chat-content {
+                gap: 12px;
             }
 
-            .camera-controls label {
-                margin-bottom: 5px;
+            .panel-card,
+            .remote-panel {
+                padding: 16px;
             }
 
-            .video-section {
-                flex-direction: column;
-                align-items: center;
+            .video-panel,
+            .remote-panel {
+                min-height: 220px;
             }
 
-            .left-buttons {
-                width: auto;
-                flex-direction: row;
+            .control-button,
+            .control-select,
+            .filter-btn,
+            .tool-btn,
+            .header-btn,
+            .send-btn,
+            .action-btn {
+                font-size: 12px;
+                padding: 10px 12px;
+            }
+
+            .tool-row,
+            .filter-row {
+                flex-wrap: wrap;
                 justify-content: center;
             }
 
-            .tool-buttons {
-                flex-direction: row;
+            .action-buttons {
+                grid-template-columns: 1fr;
             }
 
-            .right-content {
+            .message-input {
                 flex-direction: column;
-                gap: 10px;
+            }
+
+            .message-input input {
+                width: 100%;
             }
         }
     </style>
@@ -748,82 +748,92 @@
     <!-- Chat Screen -->
     <div class="chat-screen" id="chatScreen">
         <div class="chat-header">
-            <div class="logo-small">ZUNO</div>
-            <div class="status-bar">
-                <span id="statusText">Idle</span>
-                <span id="onlineUsers" class="online-count">0</span>
+            <div class="header-left">
+                <div class="logo-small">ZUNO</div>
+                <div class="ads-pill">ADS +20</div>
             </div>
-            <div class="header-buttons">
+            <div class="header-center">
+                <span id="statusText">Idle</span>
+                <span class="online-pill" id="onlineUsers">1 online</span>
+                <span class="status-pill">220</span>
+            </div>
+            <div class="header-right">
                 <button class="header-btn premium" onclick="openModal('premium')">PREMIUM</button>
                 <button class="header-btn" onclick="openModal('history')">HISTORY</button>
             </div>
         </div>
 
         <div class="chat-content">
-            <div class="video-section">
-                <div class="left-buttons">
-                    <div class="tool-buttons">
-                        <button class="tool-btn" onclick="toggleMute()">🔇 Mute</button>
-                        <button class="tool-btn" onclick="toggleCamera()">📹 Cam Off</button>
-                        <button class="tool-btn" onclick="toggleAutoOff()">⚡ Auto OFF</button>
+            <div class="video-column">
+                <div class="panel-card">
+                    <div class="panel-title-row">
+                        <div class="panel-avatar" id="userAvatar">F</div>
+                        <div>
+                            <div class="panel-title-text" id="localTitle">fyf · boy</div>
+                            <div class="panel-label">Your camera</div>
+                        </div>
+                    </div>
+
+                    <div class="video-panel">
+                        <video id="localVideo" autoplay muted playsinline></video>
+                        <div class="placeholder" id="localPlaceholder">
+                            <div class="icon">👤</div>
+                            <div class="label">You</div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <button class="control-button" onclick="flipCamera()">Flip Camera</button>
+                        <select class="control-select" id="cameraSelect" onchange="changeCamera()">
+                            <option value="">Chicony USB2.0 Camera (04)</option>
+                        </select>
+                        <select class="control-select" id="micSelect" onchange="changeMic()">
+                            <option value="">Microphone Array (2- Realtek)</option>
+                        </select>
                     </div>
                 </div>
-                <div class="right-content">
-                    <div class="video-box">
-                        <div class="video-box-title" id="strangerTitle">Stranger</div>
-                        <video id="remoteVideo" autoplay playsinline></video>
-                        <div class="stranger-placeholder" id="remotePlaceholder">
-                            <div class="stranger-icon">👤</div>
-                            <div>Stranger</div>
-                        </div>
-                        <div class="local-video-box">
-                            <video id="localVideo" autoplay muted playsinline></video>
-                            <div class="stranger-placeholder" id="localPlaceholder">
-                                <div class="stranger-icon" style="font-size: 30px;">👤</div>
-                                <div style="font-size: 10px;">You</div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="camera-controls">
-                        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
-                            <label style="color: #fff; font-size: 14px; font-weight: 600;">📹 Camera:</label>
-                            <select class="camera-select" id="cameraSelect" onchange="changeCamera()">
-                                <option value="">Select Camera</option>
-                            </select>
-                        </div>
-                        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
-                            <label style="color: #fff; font-size: 14px; font-weight: 600;">🎤 Microphone:</label>
-                            <select class="mic-select" id="micSelect" onchange="changeMic()">
-                                <option value="">Select Microphone</option>
-                            </select>
-                        </div>
-                        <button class="flip-btn" onclick="flipCamera()">📱 Flip Camera</button>
+                <div class="remote-panel">
+                    <div class="placeholder" id="remotePlaceholder">
+                        <div class="icon">👤</div>
+                        <div class="label">Stranger</div>
                     </div>
-
-                    <div class="action-buttons">
-                        <button class="action-btn btn-start" onclick="startChat()">▶ START</button>
-                        <button class="action-btn btn-next" onclick="nextStranger()">⏭ NEXT (-2)</button>
-                        <button class="action-btn btn-end" onclick="endChat()">⏹ END</button>
-                        <button class="action-btn btn-report" onclick="openModal('report')">🚩 REPORT</button>
-                    </div>
-
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" data-filter="all" onclick="setGenderFilter(this)">ALL</button>
-                        <button class="filter-btn" data-filter="male" onclick="setGenderFilter(this)">BOY 🔒</button>
-                        <button class="filter-btn" data-filter="female" onclick="setGenderFilter(this)">GIRL 🔒</button>
-                        <button class="filter-btn" data-filter="other" onclick="setGenderFilter(this)">All 🔒</button>
-                    </div>
-
-                    <div class="searching-text" id="searchingText" style="display: none;">🔄 Finding stranger...</div>
+                    <video id="remoteVideo" autoplay playsinline></video>
                 </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-start" onclick="startChat()">▶ START</button>
+                    <button class="action-btn btn-next" onclick="nextStranger()">⏭ NEXT (-2)</button>
+                    <button class="action-btn btn-end" onclick="endChat()">⏹ END</button>
+                    <button class="action-btn btn-report" onclick="openModal('report')">🚩 REPORT</button>
+                </div>
+
+                <div class="tool-row">
+                    <button class="tool-btn" onclick="toggleMute()">🔇 Mute</button>
+                    <button class="tool-btn" onclick="toggleCamera()">📹 Cam Off</button>
+                    <button class="tool-btn" onclick="toggleAutoOff()">⚡ Auto OFF</button>
+                </div>
+
+                <div class="filter-row">
+                    <button class="filter-btn active" data-filter="all" onclick="setGenderFilter(this)">ALL</button>
+                    <button class="filter-btn" data-filter="male" onclick="setGenderFilter(this)">BOY 🔒</button>
+                    <button class="filter-btn" data-filter="female" onclick="setGenderFilter(this)">GIRL 🔒</button>
+                    <button class="filter-btn" data-filter="other" onclick="setGenderFilter(this)">All 🔒</button>
+                </div>
+
+                <div class="searching-text" id="searchingText" style="display: none;">🔄 Finding stranger...</div>
             </div>
 
-            <div class="chat-section">
-                <div class="chat-header-title">Chat</div>
+            <div class="chat-panel">
+                <div class="chat-panel-header">
+                    <div class="title">Chat</div>
+                    <div class="room-status">Idle</div>
+                </div>
+
                 <div class="messages-box" id="messagesBox">
                     <div class="empty-chat">Connect to start chatting</div>
                 </div>
+
                 <div class="message-input">
                     <input type="text" id="messageInput" placeholder="Connect first..." onkeypress="handleMessageKeypress(event)">
                     <button class="send-btn" onclick="sendMessage()">SEND</button>
