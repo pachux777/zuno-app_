@@ -326,16 +326,16 @@
             flex: 1;
             padding: 20px;
             display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
+            flex-direction: row;
+            gap: 20px;
+            align-items: flex-start;
         }
 
         .video-box {
             background: #1a1a1a;
             border-radius: 12px;
             overflow: hidden;
-            width: 600px;
+            width: 400px;
             height: 400px;
             display: flex;
             justify-content: center;
@@ -346,16 +346,19 @@
             max-height: 90vw;
         }
 
-        .video-box-title {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255, 51, 51, 0.8);
-            padding: 5px 12px;
-            border-radius: 5px;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
+        .left-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 150px;
+        }
+
+        .right-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
         }
 
         video {
@@ -432,13 +435,13 @@
 
         .action-btn {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             border: none;
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .btn-start {
@@ -480,20 +483,22 @@
 
         .tool-buttons {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             margin-top: 10px;
         }
 
         .tool-btn {
-            flex: 1;
-            padding: 8px;
+            flex: none;
+            padding: 12px 20px;
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
             border: 1px solid #444;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
             transition: all 0.3s;
+            text-align: center;
         }
 
         .tool-btn:hover {
@@ -513,14 +518,14 @@
         }
 
         .filter-btn {
-            padding: 8px 16px;
+            padding: 10px 18px;
             background: rgba(255, 51, 51, 0.2);
             color: #ff3333;
             border: 1px solid #ff3333;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 13px;
             transition: all 0.3s;
         }
 
@@ -667,6 +672,21 @@
             .camera-controls label {
                 margin-bottom: 5px;
             }
+
+            .video-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .left-buttons {
+                width: auto;
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .tool-buttons {
+                flex-direction: row;
+            }
         }
     </style>
 </head>
@@ -717,52 +737,55 @@
 
         <div class="chat-content">
             <div class="video-section">
-                <div class="video-box">
-                    <div class="video-box-title" id="videoTitle">Stranger</div>
-                    <video id="localVideo" autoplay muted playsinline></video>
-                    <div class="stranger-placeholder" id="strangerPlaceholder">
-                        <div class="stranger-icon">👤</div>
-                        <div>Stranger</div>
+                <div class="left-buttons">
+                    <div class="tool-buttons">
+                        <button class="tool-btn" onclick="toggleMute()">🔇 Mute</button>
+                        <button class="tool-btn" onclick="toggleCamera()">📹 Cam Off</button>
+                        <button class="tool-btn" onclick="toggleAutoOff()">⚡ Auto OFF</button>
                     </div>
                 </div>
-
-                <div class="camera-controls">
-                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
-                        <label style="color: #fff; font-size: 14px; font-weight: 600;">📹 Camera:</label>
-                        <select class="camera-select" id="cameraSelect" onchange="changeCamera()">
-                            <option value="">Select Camera</option>
-                        </select>
+                <div class="right-content">
+                    <div class="video-box">
+                        <div class="video-box-title" id="videoTitle">Stranger</div>
+                        <video id="localVideo" autoplay muted playsinline></video>
+                        <div class="stranger-placeholder" id="strangerPlaceholder">
+                            <div class="stranger-icon">👤</div>
+                            <div>Stranger</div>
+                        </div>
                     </div>
-                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
-                        <label style="color: #fff; font-size: 14px; font-weight: 600;">🎤 Microphone:</label>
-                        <select class="mic-select" id="micSelect" onchange="changeMic()">
-                            <option value="">Select Microphone</option>
-                        </select>
+
+                    <div class="camera-controls">
+                        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                            <label style="color: #fff; font-size: 14px; font-weight: 600;">📹 Camera:</label>
+                            <select class="camera-select" id="cameraSelect" onchange="changeCamera()">
+                                <option value="">Select Camera</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                            <label style="color: #fff; font-size: 14px; font-weight: 600;">🎤 Microphone:</label>
+                            <select class="mic-select" id="micSelect" onchange="changeMic()">
+                                <option value="">Select Microphone</option>
+                            </select>
+                        </div>
+                        <button class="flip-btn" onclick="flipCamera()">📱 Flip Camera</button>
                     </div>
-                    <button class="flip-btn" onclick="flipCamera()">📱 Flip Camera</button>
-                </div>
 
-                <div class="action-buttons">
-                    <button class="action-btn btn-start" onclick="startChat()">▶ START</button>
-                    <button class="action-btn btn-next" onclick="nextStranger()">⏭ NEXT (-2)</button>
-                    <button class="action-btn btn-end" onclick="endChat()">⏹ END</button>
-                    <button class="action-btn btn-report" onclick="openModal('report')">🚩 REPORT</button>
-                </div>
+                    <div class="action-buttons">
+                        <button class="action-btn btn-start" onclick="startChat()">▶ START</button>
+                        <button class="action-btn btn-next" onclick="nextStranger()">⏭ NEXT (-2)</button>
+                        <button class="action-btn btn-end" onclick="endChat()">⏹ END</button>
+                        <button class="action-btn btn-report" onclick="openModal('report')">🚩 REPORT</button>
+                    </div>
 
-                <div class="tool-buttons">
-                    <button class="tool-btn" onclick="toggleMute()">🔇 Mute</button>
-                    <button class="tool-btn" onclick="toggleCamera()">📹 Cam Off</button>
-                    <button class="tool-btn" onclick="toggleAutoOff()">⚡ Auto OFF</button>
-                </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all" onclick="setGenderFilter(this)">ALL</button>
+                        <button class="filter-btn" data-filter="male" onclick="setGenderFilter(this)">BOY 🔒</button>
+                        <button class="filter-btn" data-filter="female" onclick="setGenderFilter(this)">GIRL 🔒</button>
+                        <button class="filter-btn" data-filter="other" onclick="setGenderFilter(this)">All 🔒</button>
+                    </div>
 
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all" onclick="setGenderFilter(this)">ALL</button>
-                    <button class="filter-btn" data-filter="male" onclick="setGenderFilter(this)">BOY 🔒</button>
-                    <button class="filter-btn" data-filter="female" onclick="setGenderFilter(this)">GIRL 🔒</button>
-                    <button class="filter-btn" data-filter="other" onclick="setGenderFilter(this)">All 🔒</button>
+                    <div class="searching-text" id="searchingText" style="display: none;">🔄 Finding stranger...</div>
                 </div>
-
-                <div class="searching-text" id="searchingText" style="display: none;">🔄 Finding stranger...</div>
             </div>
 
             <div class="chat-section">
